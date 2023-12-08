@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// schema.prisma
+
+model Morador {
+  idMorador    Int     @id @default(autoincrement()) 
+  Nome        String
+  Condominio  Condominio @relation(fields: [CondominioID], references: [CondominioID])
+  CondominioID Int
+  vaga Vaga[]
+  numApart NumApartamento[]
+}
+
+model Condominio {
+  CondominioID Int      @id @default(autoincrement())
+  Nome         String
+  endereco     String?
+  Moradores    Morador[]
+}
+
+model Vaga {
+  idVaga        Int     @id @default(autoincrement())
+  VagaID      Int     
+  Numero      Int
+  Ocupada     Boolean
+  Vaga     Morador   @relation(fields: [VagaID], references: [idMorador])
+  
+}
+
+model NumApartamento {
+  idNumApartamento Int @id @default(autoincrement())
+  numAndar Int
+  numApart Int
+  MoradorID Int
+  morador Morador   @relation(fields: [MoradorID], references: [idMorador])
+  
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
